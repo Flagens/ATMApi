@@ -1,5 +1,6 @@
 package com.pitkwiecien.atm_api.repositories;
 
+import com.pitkwiecien.atm_api.models.dto.AccountDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.interfaces.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;

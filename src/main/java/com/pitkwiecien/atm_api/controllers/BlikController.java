@@ -19,7 +19,7 @@ public class BlikController {
     }
 
     @PostMapping
-    public String addBlik(@RequestBody BlikDTO newBlik){
+    public int addBlik(@RequestBody BlikDTO newBlik){
         return repository.addObject(newBlik);
     }
 

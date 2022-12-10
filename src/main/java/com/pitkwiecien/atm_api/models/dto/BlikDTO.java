@@ -10,7 +10,7 @@ public class BlikDTO {
     private Date expirationDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createDate;
+    private Date creationDate;
 
 
     public String getCode() {
@@ -37,11 +37,11 @@ public class BlikDTO {
         this.expirationDate = expirationDate;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }

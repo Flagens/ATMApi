@@ -1,12 +1,15 @@
 package com.pitkwiecien.atm_api.models.dto;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AccountDTO {
     private int id;
     private String name;
     private String surname;
     private BigDecimal money;
+    private Set<BlikDTO> bliks = new HashSet<BlikDTO>();
 
     public int getId() {
         return id;
@@ -38,5 +41,13 @@ public class AccountDTO {
 
     public void setMoney(BigDecimal money) {
         this.money = money;
+    }
+
+    public Set<BlikDTO> getBliks() {
+        return bliks;
+    }
+
+    public void setBliks(Set<BlikDTO> bliks) {
+        this.bliks = bliks;
     }
 }

@@ -1,9 +1,7 @@
 package com.pitkwiecien.atm_api.repositories;
 
-import com.pitkwiecien.atm_api.mappers.AccountMapper;
 import com.pitkwiecien.atm_api.mappers.BlikMapper;
 import com.pitkwiecien.atm_api.mappers.BlikTransactionMapper;
-import com.pitkwiecien.atm_api.models.dto.AccountDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.models.interfaces.RepositoryInterface;
@@ -29,17 +27,20 @@ public class BlikRepository implements RepositoryInterface<BlikDTO> {
 
     @Override
     public List<BlikDTO> getObjects() {
-        return jdbcTemplate.query("SELECT * FROM blik LEFT JOIN blik_transaction ON blik_code=blik.code",
+        List<BlikDTO> bliksSplit =  jdbcTemplate.query(
+                "SELECT * FROM blik LEFT JOIN blik_transaction ON blik_code=blik.code",
                 new BlikMapper(new BlikTransactionMapper()));
+        return groupBliks(bliksSplit);
     }
 
     @Override
     public BlikDTO getObjectByKey(String key) {
-        return jdbcTemplate.queryForObject(
+        List<BlikDTO> bliksSplit = jdbcTemplate.query(
                 "SELECT * FROM blik LEFT JOIN blik_transaction ON blik_code=blik.code WHERE code=?",
                 new BlikMapper(new BlikTransactionMapper()),
                 key
         );
+        return groupBliks(bliksSplit).get(0);
     }
 
     private List<BlikDTO> groupBliks(List<BlikDTO> bliksSplit){

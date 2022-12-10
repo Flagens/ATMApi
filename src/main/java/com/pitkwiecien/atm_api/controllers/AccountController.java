@@ -16,12 +16,12 @@ public class AccountController {
     AccountRepository repository;
 
     @PostMapping
-    String createAccount(@RequestBody AccountDTO accountDTO){
-        return null;
+    public int createAccount(@RequestBody AccountDTO accountDTO){
+        return repository.addObject(accountDTO);
     }
 
     @GetMapping
-    List<AccountDTO> showAccounts(){
+    public List<AccountDTO> showAccounts(){
         return repository.getObjects();
     }
 

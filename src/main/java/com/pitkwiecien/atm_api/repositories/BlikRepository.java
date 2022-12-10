@@ -4,6 +4,7 @@ import com.pitkwiecien.atm_api.mappers.BlikMapper;
 import com.pitkwiecien.atm_api.mappers.BlikTransactionMapper;
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
+import com.pitkwiecien.atm_api.models.enums.TransactionFilteringMode;
 import com.pitkwiecien.atm_api.models.interfaces.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,5 +61,24 @@ public class BlikRepository implements RepositoryInterface<BlikDTO> {
             }
         }
         return ret;
+    }
+
+    public List<BlikTransactionDTO> filterTransactions(List<BlikTransactionDTO> transactionList, TransactionFilteringMode mode) {
+        List<BlikTransactionDTO> filteredList = new ArrayList<>();
+        for (BlikTransactionDTO transaction : transactionList){
+            boolean toAdd = false;
+            switch (mode){
+                case UNVERIFIED:
+                    if(!transaction.isVerified()) toAdd = true;
+                    break;
+                case UNEXECUTED:
+                    if(!transaction.isExecuted()) toAdd = true;
+                    break;
+            }
+            if(toAdd){
+                filteredList.add(transaction);
+            }
+        }
+        return filteredList;
     }
 }

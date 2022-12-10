@@ -9,7 +9,7 @@ public class AccountDTO {
     private String name;
     private String surname;
     private BigDecimal money;
-    private Set<BlikDTO> bliks = new HashSet<BlikDTO>();
+    private final Set<BlikDTO> bliks = new HashSet<>();
 
     public int getId() {
         return id;
@@ -45,9 +45,5 @@ public class AccountDTO {
 
     public Set<BlikDTO> getBliks() {
         return bliks;
-    }
-
-    public void setBliks(Set<BlikDTO> bliks) {
-        this.bliks = bliks;
     }
 }

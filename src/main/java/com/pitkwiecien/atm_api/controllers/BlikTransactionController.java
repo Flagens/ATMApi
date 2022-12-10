@@ -4,6 +4,7 @@ import com.pitkwiecien.atm_api.models.dto.AccountDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.repositories.AccountRepository;
 import com.pitkwiecien.atm_api.repositories.BlikTransactionRepository;
+import com.pitkwiecien.atm_api.services.BlikTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,13 @@ public class BlikTransactionController {
 
     @PostMapping
     public int createBlikTransaction(@RequestBody BlikTransactionDTO blikTransactionDTO){
-        return repository.addObject(blikTransactionDTO);
+        BlikTransactionService blikTransactionService = new BlikTransactionService(blikTransactionDTO);
+        int verificationReturn = blikTransactionService.verify();
+        if(verificationReturn == 1) {
+            return repository.addObject(blikTransactionDTO);
+        } else {
+            return verificationReturn;
+        }
     }
 
     @GetMapping

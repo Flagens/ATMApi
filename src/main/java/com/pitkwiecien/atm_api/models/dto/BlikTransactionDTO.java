@@ -6,11 +6,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class BlikTransactionDTO {
-    public int id;
-    public String blikCode;
-    public boolean verified;
-    public boolean executed;
-    public BigDecimal amount;
+    private int id;
+    private String blikCode;
+    private boolean verified;
+    private boolean executed;
+    private BigDecimal amount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date date;

@@ -1,25 +1,38 @@
-//package com.pitkwiecien.atm_api.services;
-//
-//import com.pitkwiecien.atm_api.models.dto.AccountDTO;
-//import com.pitkwiecien.atm_api.models.dto.BlikDTO;
-//import com.pitkwiecien.atm_api.repositories.AccountRepository;
-//import com.pitkwiecien.atm_api.repositories.BlikRepository;
-//
-//import java.math.BigDecimal;
-//import java.util.Date;
-//
-//public class BlikService {
-//    BlikRepository blikRepository = new BlikRepository();
-//    AccountRepository accountRepository = new AccountRepository();
-//
-//    public boolean verifyBlik(String code, Date date, int accountId, BigDecimal amount){
-//        BlikDTO blik = blikRepository.getObjectByKey(code);
-//        if(blik == null) return false;
-//        else if(blik.getAccountId() != accountId) return false;
-//        else if (date.after(blik.getExpirationDate()) || date.before(blik.getCreationDate())) return false;
-//        else {
-//            AccountDTO account = accountRepository.getObjectByKey(String.valueOf(accountId));
-//            return amount.compareTo(account.getMoney()) <= 0;
-//        }
-//    }
-//}
+package com.pitkwiecien.atm_api.services;
+
+import com.pitkwiecien.atm_api.models.dto.AccountDTO;
+import com.pitkwiecien.atm_api.models.dto.BlikDTO;
+import com.pitkwiecien.atm_api.models.interfaces.ServiceInterface;
+import com.pitkwiecien.atm_api.repositories.AccountRepository;
+import lombok.AllArgsConstructor;
+
+import java.util.Date;
+
+@AllArgsConstructor
+public class BlikService implements ServiceInterface {
+    public BlikDTO blik;
+
+    @Override
+    public int verify(){
+        if(!verifyNotNulledParams())
+            return -2;
+
+        if(!verifyBlikOwnership())
+            return -3;
+        return 1;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean verifyBlikOwnership(){
+        AccountRepository accountRepository = new AccountRepository();
+        AccountDTO accountDTO = accountRepository.getObjectByKey(String.valueOf(blik.getAccountId()));
+        return accountDTO.getBliks().contains(blik);
+    }
+
+    @Override
+    public boolean verifyNotNulledParams(){
+        return blik.getCode() != null
+                && blik.getExpirationDate() != null
+                && blik.getCreationDate() != null;
+    }
+}

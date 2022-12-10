@@ -2,6 +2,8 @@ package com.pitkwiecien.atm_api.controllers;
 
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.repositories.BlikRepository;
+import com.pitkwiecien.atm_api.services.BlikService;
+import com.pitkwiecien.atm_api.services.BlikTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,14 @@ public class BlikController {
     }
 
     @PostMapping
-    public int createBlik(@RequestBody BlikDTO newBlik){
-        return repository.addObject(newBlik);
+    public int createBlik(@RequestBody BlikDTO blikDTO){
+        BlikService blikService = new BlikService(blikDTO);
+        int verificationReturn = blikService.verify();
+        if(verificationReturn == 1) {
+            return repository.addObject(blikDTO);
+        } else {
+            return verificationReturn;
+        }
     }
 
     @GetMapping("{code}/")

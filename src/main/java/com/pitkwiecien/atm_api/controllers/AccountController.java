@@ -26,7 +26,7 @@ public class AccountController {
     }
 
     @GetMapping("{code}/")
-    public AccountDTO showBlikById(@PathVariable("code") String code){
+    public AccountDTO showAccountById(@PathVariable("code") String code){
         return repository.getObjectByKey(code);
     }
 }

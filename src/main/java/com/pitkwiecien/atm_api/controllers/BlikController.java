@@ -24,7 +24,7 @@ public class BlikController {
     }
 
     @GetMapping("{code}/")
-    public BlikDTO showBlikById(@PathVariable("code") String code){
+    public BlikDTO showBlikByCode(@PathVariable("code") String code){
         return repository.getObjectByKey(code);
     }
 }

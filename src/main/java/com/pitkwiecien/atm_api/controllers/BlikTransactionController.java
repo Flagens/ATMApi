@@ -16,17 +16,17 @@ public class BlikTransactionController {
     BlikTransactionRepository repository;
 
     @PostMapping
-    public int createAccount(@RequestBody BlikTransactionDTO blikTransactionDTO){
+    public int createBlikTransaction(@RequestBody BlikTransactionDTO blikTransactionDTO){
         return repository.addObject(blikTransactionDTO);
     }
 
     @GetMapping
-    public List<BlikTransactionDTO> showAccounts(){
+    public List<BlikTransactionDTO> showBlikTransactions(){
         return repository.getObjects();
     }
 
     @GetMapping("{code}/")
-    public BlikTransactionDTO showBlikById(@PathVariable("code") String code){
+    public BlikTransactionDTO showBlikTransactionById(@PathVariable("code") String code){
         return repository.getObjectByKey(code);
     }
 }

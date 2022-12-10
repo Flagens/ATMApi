@@ -19,17 +19,17 @@ public class BlikRepository implements RepositoryInterface<BlikDTO> {
     public int addObject(BlikDTO obj) {
         return jdbcTemplate.update("INSERT INTO blik(code, expiration_date, creation_date, account_id)" +
                         "values (?, ?, ?, ?)",
-                new Object[]{obj.getCode(), obj.getExpirationDate(), obj.getCreationDate(), obj.getAccountDto().getId()});
+                obj.getCode(), obj.getExpirationDate(), obj.getCreationDate(), obj.getAccountDto().getId());
     }
 
     @Override
     public List<BlikDTO> getObjects() {
-        return jdbcTemplate.query("SELECT * FROM blik", new BlikMapper(new AccountMapper()));
+        return jdbcTemplate.query("SELECT * FROM blik, account", new BlikMapper(new AccountMapper()));
     }
 
     @Override
     public BlikDTO getObjectByKey(String key) {
-        return jdbcTemplate.queryForObject("SELECT * FROM blik where code=?",
+        return jdbcTemplate.queryForObject("SELECT * FROM blik WHERE code=?",
                 new BlikMapper(new AccountMapper()),
                 key
         );

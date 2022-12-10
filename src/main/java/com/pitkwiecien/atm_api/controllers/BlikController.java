@@ -23,7 +23,7 @@ public class BlikController {
         return repository.addObject(newBlik);
     }
 
-    @GetMapping("{code}")
+    @GetMapping("{code}/")
     public BlikDTO showBlikById(@PathVariable("code") String code){
         return repository.getObjectByKey(code);
     }

@@ -25,7 +25,7 @@ public class BlikTransactionController {
         return repository.getObjects();
     }
 
-    @GetMapping("{code}")
+    @GetMapping("{code}/")
     public BlikTransactionDTO showBlikById(@PathVariable("code") String code){
         return repository.getObjectByKey(code);
     }

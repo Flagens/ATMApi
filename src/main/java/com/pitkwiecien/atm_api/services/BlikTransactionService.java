@@ -7,18 +7,20 @@ import com.pitkwiecien.atm_api.models.interfaces.ServiceInterface;
 import com.pitkwiecien.atm_api.repositories.AccountRepository;
 import com.pitkwiecien.atm_api.repositories.BlikRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @AllArgsConstructor
+@Service
 public class BlikTransactionService implements ServiceInterface {
     public BlikTransactionDTO blikTransaction;
     private final BlikRepository blikRepository = new BlikRepository();
     private final AccountRepository accountRepository = new AccountRepository();
 
-    @Override
-    public int verify(){
+    public int verify(AccountRepository accountRepository){
         if(!verifyNotNulledObject()){
             return -1;
         }
@@ -37,7 +39,7 @@ public class BlikTransactionService implements ServiceInterface {
         }
 
         BlikService blikService = new BlikService(blik);
-        if(!blikService.verifyBlikOwnership())
+        if(!blikService.verifyBlikOwnership(accountRepository))
             return -5;
 
 

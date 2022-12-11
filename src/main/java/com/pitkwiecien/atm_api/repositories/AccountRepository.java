@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class AccountRepository implements RepositoryInterface<AccountDTO> {
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public int addObject(AccountDTO obj) {
@@ -35,12 +34,36 @@ public class AccountRepository implements RepositoryInterface<AccountDTO> {
 
     @Override
     public AccountDTO getObjectByKey(String key) {
+        AccountDTO a = new AccountDTO();
         List<AccountDTO> accountsSplit =  jdbcTemplate.query(
                 "SELECT * FROM account LEFT JOIN blik ON account_id=account.id " +
-                        "LEFT JOIN blik_transaction on blik.code = blik_code WHERE account_id=?"
+                        "LEFT JOIN blik_transaction on blik.code = blik_code WHERE account.id=?"
                 , new AccountMapper(new BlikMapper(new BlikTransactionMapper())), key
         );
-        return groupAccounts(accountsSplit).get(0);
+        List<AccountDTO> ret = groupAccounts(accountsSplit);
+        if(ret.size() >= 1){
+            return ret.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void setRandomKey(AccountDTO obj){
+        Random randomizer = new Random();
+        Set<Integer> usedKeys = getKeys();
+        int key;
+        do {
+            key = Math.abs(randomizer.nextInt());
+        } while (usedKeys.contains(key));
+        obj.setId(key);
+    }
+
+    private Set<Integer> getKeys(){
+        Set<Integer> keyList = new HashSet<>();
+        jdbcTemplate.query("SELECT id FROM account",
+                (rs, num) -> keyList.add(rs.getInt("id")));
+        return keyList;
     }
 
     private List<AccountDTO> groupAccounts(List<AccountDTO> accountsSplit){

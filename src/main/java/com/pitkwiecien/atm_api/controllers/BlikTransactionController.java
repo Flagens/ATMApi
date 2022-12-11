@@ -19,10 +19,14 @@ public class BlikTransactionController {
     @Autowired
     BlikTransactionRepository repository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     @PostMapping
     public int createBlikTransaction(@RequestBody BlikTransactionDTO blikTransactionDTO){
+        repository.setRandomKey(blikTransactionDTO);
         BlikTransactionService blikTransactionService = new BlikTransactionService(blikTransactionDTO);
-        int verificationReturn = blikTransactionService.verify();
+        int verificationReturn = blikTransactionService.verify(accountRepository);
         if(verificationReturn == 1) {
             return repository.addObject(blikTransactionDTO);
         } else {

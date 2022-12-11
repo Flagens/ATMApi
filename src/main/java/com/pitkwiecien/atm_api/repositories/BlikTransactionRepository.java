@@ -1,23 +1,21 @@
 package com.pitkwiecien.atm_api.repositories;
 
-import com.pitkwiecien.atm_api.mappers.AccountMapper;
-import com.pitkwiecien.atm_api.mappers.BlikMapper;
 import com.pitkwiecien.atm_api.mappers.BlikTransactionMapper;
-import com.pitkwiecien.atm_api.models.dto.BlikDTO;
-import com.pitkwiecien.atm_api.models.dto.BlikTransactionConfrmationDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.models.interfaces.RepositoryInterface;
-import com.pitkwiecien.atm_api.services.BlikTransactionConfirmationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 @Repository
 public class BlikTransactionRepository implements RepositoryInterface<BlikTransactionDTO> {
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    public JdbcTemplate jdbcTemplate;
 
     @Override
     public int addObject(BlikTransactionDTO obj) {
@@ -39,6 +37,24 @@ public class BlikTransactionRepository implements RepositoryInterface<BlikTransa
                 new BlikTransactionMapper(),
                 key
         );
+    }
+
+    @Override
+    public void setRandomKey(BlikTransactionDTO obj) {
+        Random randomizer = new Random();
+        Set<Integer> usedKeys = getKeys();
+        int key;
+        do {
+            key = Math.abs(randomizer.nextInt());
+        } while (usedKeys.contains(key));
+        obj.setId(key);
+    }
+
+    private Set<Integer> getKeys(){
+        Set<Integer> keyList = new HashSet<>();
+        jdbcTemplate.query("SELECT id FROM blik_transaction",
+                (rs, num) -> keyList.add(rs.getInt("id")));
+        return keyList;
     }
 
     public int confirmTransaction(BlikTransactionDTO transaction){

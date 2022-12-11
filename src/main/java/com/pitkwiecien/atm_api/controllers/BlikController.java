@@ -3,6 +3,7 @@ package com.pitkwiecien.atm_api.controllers;
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.models.enums.TransactionFilteringMode;
+import com.pitkwiecien.atm_api.repositories.AccountRepository;
 import com.pitkwiecien.atm_api.repositories.BlikRepository;
 import com.pitkwiecien.atm_api.services.BlikService;
 import com.pitkwiecien.atm_api.services.BlikTransactionService;
@@ -17,6 +18,9 @@ public class BlikController {
     @Autowired
     BlikRepository repository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     @GetMapping
     public List<BlikDTO> showBliks(){
         return repository.getObjects();
@@ -24,8 +28,9 @@ public class BlikController {
 
     @PostMapping
     public int createBlik(@RequestBody BlikDTO blikDTO){
+        repository.setRandomKey(blikDTO);
         BlikService blikService = new BlikService(blikDTO);
-        int verificationReturn = blikService.verify();
+        int verificationReturn = blikService.verify(accountRepository);
         if(verificationReturn == 1) {
             return repository.addObject(blikDTO);
         } else {

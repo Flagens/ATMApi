@@ -10,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Repository
 public class BlikRepository implements RepositoryInterface<BlikDTO> {
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    public JdbcTemplate jdbcTemplate;
 
     @Override
     public int addObject(BlikDTO obj) {
@@ -42,6 +40,23 @@ public class BlikRepository implements RepositoryInterface<BlikDTO> {
                 key
         );
         return groupBliks(bliksSplit).get(0);
+    }
+
+    @Override
+    public void setRandomKey(BlikDTO obj) {
+        Set<String> usedKeys = getKeys();
+        String key;
+        do {
+            key = String.valueOf((int) (Math.random() * (999999 - 111111)) + 111111);
+        } while (usedKeys.contains(key));
+        obj.setCode(key);
+    }
+
+    private Set<String> getKeys(){
+        Set<String> keyList = new HashSet<>();
+        jdbcTemplate.query("SELECT code FROM blik",
+                (rs, num) -> keyList.add(rs.getString("code")));
+        return keyList;
     }
 
     private List<BlikDTO> groupBliks(List<BlikDTO> bliksSplit){

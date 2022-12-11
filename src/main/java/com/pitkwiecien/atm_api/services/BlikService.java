@@ -5,15 +5,16 @@ import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.interfaces.ServiceInterface;
 import com.pitkwiecien.atm_api.repositories.AccountRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
 
 @AllArgsConstructor
+@Service
 public class BlikService implements ServiceInterface {
     public BlikDTO blik;
 
-    @Override
-    public int verify(){
+    public int verify(AccountRepository repository){
         if(!verifyNotNulledObject()){
             return -1;
         }
@@ -21,15 +22,12 @@ public class BlikService implements ServiceInterface {
         if(!verifyNotNulledParams())
             return -2;
 
-        if(!verifyBlikOwnership())
-            return -3;
         return 1;
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean verifyBlikOwnership(){
-        AccountRepository accountRepository = new AccountRepository();
-        AccountDTO accountDTO = accountRepository.getObjectByKey(String.valueOf(blik.getAccountId()));
+    public boolean verifyBlikOwnership(AccountRepository repository){
+        AccountDTO accountDTO = repository.getObjectByKey(String.valueOf(blik.getAccountId()));
         return accountDTO.getBliks().contains(blik);
     }
 

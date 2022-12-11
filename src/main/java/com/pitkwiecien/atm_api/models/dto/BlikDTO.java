@@ -1,10 +1,12 @@
 package com.pitkwiecien.atm_api.models.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Component
 public class BlikDTO {
     private String code;
     int accountId;

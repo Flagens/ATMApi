@@ -1,9 +1,11 @@
 package com.pitkwiecien.atm_api.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Component
 public class BlikTransactionConfrmationDTO {
     private int fromAccountId;
     private int confirmedTransactionId;

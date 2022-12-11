@@ -3,11 +3,12 @@ package com.pitkwiecien.atm_api.services;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionConfrmationDTO;
 import com.pitkwiecien.atm_api.models.interfaces.ServiceInterface;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Service
 public class BlikTransactionConfirmationService implements ServiceInterface {
     BlikTransactionConfrmationDTO blikTransactionConfrmationDTO;
-    @Override
     public int verify() {
         if(!verifyNotNulledObject()){
             return -1;

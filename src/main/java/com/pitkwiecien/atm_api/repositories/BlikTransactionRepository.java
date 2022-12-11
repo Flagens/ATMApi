@@ -4,8 +4,10 @@ import com.pitkwiecien.atm_api.mappers.AccountMapper;
 import com.pitkwiecien.atm_api.mappers.BlikMapper;
 import com.pitkwiecien.atm_api.mappers.BlikTransactionMapper;
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
+import com.pitkwiecien.atm_api.models.dto.BlikTransactionConfrmationDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.models.interfaces.RepositoryInterface;
+import com.pitkwiecien.atm_api.services.BlikTransactionConfirmationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -37,5 +39,10 @@ public class BlikTransactionRepository implements RepositoryInterface<BlikTransa
                 new BlikTransactionMapper(),
                 key
         );
+    }
+
+    public int confirmTransaction(BlikTransactionDTO transaction){
+        transaction.setVerified(true);
+        return jdbcTemplate.update("UPDATE blik_transaction SET verified=1 WHERE id=?", transaction.getId());
     }
 }

@@ -4,4 +4,6 @@ public interface ServiceInterface {
     int verify();
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean verifyNotNulledParams();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    boolean verifyNotNulledObject();
 }

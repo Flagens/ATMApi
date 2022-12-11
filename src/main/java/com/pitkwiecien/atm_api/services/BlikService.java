@@ -14,6 +14,10 @@ public class BlikService implements ServiceInterface {
 
     @Override
     public int verify(){
+        if(!verifyNotNulledObject()){
+            return -1;
+        }
+
         if(!verifyNotNulledParams())
             return -2;
 
@@ -34,5 +38,10 @@ public class BlikService implements ServiceInterface {
         return blik.getCode() != null
                 && blik.getExpirationDate() != null
                 && blik.getCreationDate() != null;
+    }
+
+    @Override
+    public boolean verifyNotNulledObject(){
+        return blik != null;
     }
 }

@@ -19,6 +19,10 @@ public class BlikTransactionService implements ServiceInterface {
 
     @Override
     public int verify(){
+        if(!verifyNotNulledObject()){
+            return -1;
+        }
+
         if(!verifyNotNulledParams()){
             return -2;
         }
@@ -68,5 +72,10 @@ public class BlikTransactionService implements ServiceInterface {
         return blikTransaction.getBlikCode() != null
                 && blikTransaction.getAmount() != null
                 && blikTransaction.getDate() != null;
+    }
+
+    @Override
+    public boolean verifyNotNulledObject(){
+        return blikTransaction != null;
     }
 }

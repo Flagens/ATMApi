@@ -16,11 +16,11 @@ public class BlikService implements ServiceInterface {
 
     public int verify(AccountRepository repository){
         if(!verifyNotNulledObject()){
-            return -1;
+            return -2;
         }
 
         if(!verifyNotNulledParams())
-            return -2;
+            return -3;
 
         return 1;
     }

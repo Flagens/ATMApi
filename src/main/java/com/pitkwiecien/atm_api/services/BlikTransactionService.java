@@ -20,20 +20,20 @@ public class BlikTransactionService implements ServiceInterface {
 
     public int verify(AccountRepository accountRepository, BlikRepository blikRepository){
         if(!verifyNotNulledObject()){
-            return -1;
+            return -2;
         }
 
         if(!verifyNotNulledParams()){
-            return -2;
+            return -3;
         }
 
         BlikDTO blik = blikRepository.getObjectByKey(blikTransaction.getBlikCode());
         if(blik == null)
-            return -3;
+            return -4;
 
         AccountDTO account = accountRepository.getObjectByKey(String.valueOf(blik.getAccountId()));
         if(account == null){
-            return -4;
+            return -5;
             }
 
         int dateVerification = verifyPaymentDate(blikRepository, blikTransaction.getDate());

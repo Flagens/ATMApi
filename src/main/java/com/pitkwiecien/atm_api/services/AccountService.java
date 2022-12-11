@@ -14,11 +14,11 @@ public class AccountService implements ServiceInterface {
 
     public int verify() {
         if(!verifyNotNulledObject()){
-            return -1;
+            return -2;
         }
 
         if(!verifyNotNulledParams())
-            return -2;
+            return -3;
 
         return 1;
     }

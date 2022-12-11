@@ -1,5 +1,6 @@
 package com.pitkwiecien.atm_api.controllers;
 
+import com.pitkwiecien.atm_api.Constants;
 import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.models.enums.TransactionFilteringMode;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/blik/")
@@ -22,12 +24,18 @@ public class BlikController {
     AccountRepository accountRepository;
 
     @GetMapping
-    public List<BlikDTO> showBliks(){
+    public List<BlikDTO> showBliks(@RequestHeader("access-token") String accessToken){
+        if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
+            return null;
+        }
         return repository.getObjects();
     }
 
     @PostMapping
-    public int createBlik(@RequestBody BlikDTO blikDTO){
+    public int createBlik(@RequestBody BlikDTO blikDTO, @RequestHeader("access-token") String accessToken){
+        if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
+            return -1;
+        }
         repository.setRandomKey(blikDTO);
         BlikService blikService = new BlikService(blikDTO);
         int verificationReturn = blikService.verify(accountRepository);
@@ -39,23 +47,39 @@ public class BlikController {
     }
 
     @GetMapping("{code}/")
-    public BlikDTO showBlikByCode(@PathVariable("code") String code){
+    public BlikDTO showBlikByCode(@PathVariable("code") String code,
+                                  @RequestHeader("access-token") String accessToken){
+        if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
+            return null;
+        }
         return repository.getObjectByKey(code);
     }
 
     @GetMapping("{code}/transactions/")
-    public List<BlikTransactionDTO> showBlikTransactionsForBlik(@PathVariable("code") String code){
+    public List<BlikTransactionDTO> showBlikTransactionsForBlik(@PathVariable("code") String code,
+                                                                @RequestHeader("access-token") String accessToken){
+        if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
+            return null;
+        }
         return repository.getObjectByKey(code).getTransactions();
     }
 
     @GetMapping("{code}/transactions/unverified/")
-    public List<BlikTransactionDTO> showUnverifiedBlikTransactionsForBlik(@PathVariable("code") String code){
+    public List<BlikTransactionDTO> showUnverifiedBlikTransactionsForBlik(@PathVariable("code") String code,
+                                                                          @RequestHeader("access-token") String accessToken){
+        if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
+            return null;
+        }
         return repository.filterTransactions(repository.getObjectByKey(code).getTransactions(),
                 TransactionFilteringMode.UNVERIFIED);
     }
 
     @GetMapping("{code}/transactions/unexecuted/")
-    public List<BlikTransactionDTO> showUnexecutedBlikTransactionsForBlik(@PathVariable("code") String code){
+    public List<BlikTransactionDTO> showUnexecutedBlikTransactionsForBlik(@PathVariable("code") String code,
+                                                                          @RequestHeader("access-token") String accessToken){
+        if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
+            return null;
+        }
         return repository.filterTransactions(repository.getObjectByKey(code).getTransactions(),
                 TransactionFilteringMode.UNEXECUTED);
     }

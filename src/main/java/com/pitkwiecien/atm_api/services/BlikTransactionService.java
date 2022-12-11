@@ -17,10 +17,8 @@ import java.util.Date;
 @Service
 public class BlikTransactionService implements ServiceInterface {
     public BlikTransactionDTO blikTransaction;
-    private final BlikRepository blikRepository = new BlikRepository();
-    private final AccountRepository accountRepository = new AccountRepository();
 
-    public int verify(AccountRepository accountRepository){
+    public int verify(AccountRepository accountRepository, BlikRepository blikRepository){
         if(!verifyNotNulledObject()){
             return -1;
         }
@@ -33,36 +31,40 @@ public class BlikTransactionService implements ServiceInterface {
         if(blik == null)
             return -3;
 
-        AccountDTO account = accountRepository.getObjectByKey(blik.getCode());
+        AccountDTO account = accountRepository.getObjectByKey(String.valueOf(blik.getAccountId()));
         if(account == null){
             return -4;
-        }
+            }
 
-        BlikService blikService = new BlikService(blik);
-        if(!blikService.verifyBlikOwnership(accountRepository))
-            return -5;
-
-
-        if(!verifyPaymentDate(blikTransaction.getDate()))
+        int dateVerification = verifyPaymentDate(blikRepository, blikTransaction.getDate());
+        if(dateVerification == -1)
             return -6;
-        if(!verifyMoneyAmount(blikTransaction.getAmount()))
-            return -7;
-        if(!verifyInitialValues())
+        else if(dateVerification == -2)
+            return  -7;
+        if(!verifyMoneyAmount(blikRepository, accountRepository, blikTransaction.getAmount()))
             return -8;
+        if(!verifyInitialValues())
+            return -9;
 
         return 1;
     }
 
-    public boolean verifyPaymentDate(Date date){
+    public int verifyPaymentDate(BlikRepository blikRepository, Date date){
         BlikDTO blik = blikRepository.getObjectByKey(blikTransaction.getBlikCode());
 
-        return blik.getCreationDate().before(date) && blik.getExpirationDate().after(date);
+        if(blik.getExpirationDate().before(date))
+            return -1;
+        else if(blik.getCreationDate().after(date))
+            return  -2;
+        else
+            return 1;
     }
 
-    public boolean verifyMoneyAmount(BigDecimal amount){
+    public boolean verifyMoneyAmount(BlikRepository blikRepository, AccountRepository accountRepository,
+                                     BigDecimal amount){
         BlikDTO blik = blikRepository.getObjectByKey(blikTransaction.getBlikCode());
-        AccountDTO account = accountRepository.getObjectByKey(blik.getCode());
-        return account.getMoney().compareTo(amount) >= 0;
+        AccountDTO account = accountRepository.getObjectByKey(String.valueOf(blik.getAccountId()));
+        return account != null && account.getMoney().compareTo(amount) >= 0;
     }
 
     public boolean verifyInitialValues(){

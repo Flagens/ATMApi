@@ -5,6 +5,7 @@ import com.pitkwiecien.atm_api.models.dto.BlikDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionConfrmationDTO;
 import com.pitkwiecien.atm_api.models.dto.BlikTransactionDTO;
 import com.pitkwiecien.atm_api.repositories.AccountRepository;
+import com.pitkwiecien.atm_api.repositories.BlikRepository;
 import com.pitkwiecien.atm_api.repositories.BlikTransactionRepository;
 import com.pitkwiecien.atm_api.services.BlikTransactionConfirmationService;
 import com.pitkwiecien.atm_api.services.BlikTransactionService;
@@ -22,11 +23,14 @@ public class BlikTransactionController {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    BlikRepository blikRepository;
+
     @PostMapping
     public int createBlikTransaction(@RequestBody BlikTransactionDTO blikTransactionDTO){
         repository.setRandomKey(blikTransactionDTO);
         BlikTransactionService blikTransactionService = new BlikTransactionService(blikTransactionDTO);
-        int verificationReturn = blikTransactionService.verify(accountRepository);
+        int verificationReturn = blikTransactionService.verify(accountRepository, blikRepository);
         if(verificationReturn == 1) {
             return repository.addObject(blikTransactionDTO);
         } else {

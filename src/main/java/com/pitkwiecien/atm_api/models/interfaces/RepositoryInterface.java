@@ -6,5 +6,5 @@ public interface RepositoryInterface<T> {
     int addObject(T obj);
     List<T> getObjects();
     T getObjectByKey(String key);
-    void setRandomKey(T obj);
+    String setRandomKey(T obj);
 }

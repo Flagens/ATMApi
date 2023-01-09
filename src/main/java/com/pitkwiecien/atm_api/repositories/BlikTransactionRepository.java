@@ -40,7 +40,7 @@ public class BlikTransactionRepository implements RepositoryInterface<BlikTransa
     }
 
     @Override
-    public void setRandomKey(BlikTransactionDTO obj) {
+    public String setRandomKey(BlikTransactionDTO obj) {
         Random randomizer = new Random();
         Set<Integer> usedKeys = getKeys();
         int key;
@@ -48,6 +48,7 @@ public class BlikTransactionRepository implements RepositoryInterface<BlikTransa
             key = Math.abs(randomizer.nextInt());
         } while (usedKeys.contains(key));
         obj.setId(key);
+        return String.valueOf(obj.getId());
     }
 
     private Set<Integer> getKeys(){

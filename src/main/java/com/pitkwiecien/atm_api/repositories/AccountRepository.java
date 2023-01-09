@@ -9,7 +9,6 @@ import com.pitkwiecien.atm_api.models.interfaces.RepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.*;
 
@@ -35,7 +34,6 @@ public class AccountRepository implements RepositoryInterface<AccountDTO> {
 
     @Override
     public AccountDTO getObjectByKey(String key) {
-        AccountDTO a = new AccountDTO();
         List<AccountDTO> accountsSplit =  jdbcTemplate.query(
                 "SELECT * FROM account LEFT JOIN blik ON account_id=account.id " +
                         "LEFT JOIN blik_transaction on blik.code = blik_code WHERE account.id=?"
@@ -50,7 +48,7 @@ public class AccountRepository implements RepositoryInterface<AccountDTO> {
     }
 
     @Override
-    public void setRandomKey(AccountDTO obj){
+    public String setRandomKey(AccountDTO obj){
         Random randomizer = new Random();
         Set<Integer> usedKeys = getKeys();
         int key;
@@ -58,6 +56,7 @@ public class AccountRepository implements RepositoryInterface<AccountDTO> {
             key = Math.abs(randomizer.nextInt());
         } while (usedKeys.contains(key));
         obj.setId(key);
+        return String.valueOf(obj.getId());
     }
 
     private Set<Integer> getKeys(){

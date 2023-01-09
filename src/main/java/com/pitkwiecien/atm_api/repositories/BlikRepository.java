@@ -43,13 +43,14 @@ public class BlikRepository implements RepositoryInterface<BlikDTO> {
     }
 
     @Override
-    public void setRandomKey(BlikDTO obj) {
+    public String setRandomKey(BlikDTO obj) {
         Set<String> usedKeys = getKeys();
         String key;
         do {
             key = String.valueOf((int) (Math.random() * (999999 - 111111)) + 111111);
         } while (usedKeys.contains(key));
         obj.setCode(key);
+        return obj.getCode();
     }
 
     private Set<String> getKeys(){

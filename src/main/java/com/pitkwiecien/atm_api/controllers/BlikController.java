@@ -32,17 +32,17 @@ public class BlikController {
     }
 
     @PostMapping
-    public int createBlik(@RequestBody BlikDTO blikDTO, @RequestHeader("access-token") String accessToken){
+    public String createBlik(@RequestBody BlikDTO blikDTO, @RequestHeader("access-token") String accessToken){
         if(!Objects.equals(accessToken, Constants.ACCESS_TOKEN)){
-            return -1;
+            return "-1";
         }
-        repository.setRandomKey(blikDTO);
+        String key = repository.setRandomKey(blikDTO);
         BlikService blikService = new BlikService(blikDTO);
         int verificationReturn = blikService.verify(accountRepository);
         if(verificationReturn == 1) {
-            return repository.addObject(blikDTO);
+            return key;
         } else {
-            return verificationReturn;
+            return String.valueOf(verificationReturn);
         }
     }
 

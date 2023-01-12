@@ -40,6 +40,7 @@ public class BlikController {
         BlikService blikService = new BlikService(blikDTO);
         int verificationReturn = blikService.verify(accountRepository);
         if(verificationReturn == 1) {
+            repository.addObject(blikDTO);
             return key;
         } else {
             return String.valueOf(verificationReturn);

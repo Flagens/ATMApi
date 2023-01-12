@@ -51,4 +51,15 @@ public class BlikDTO {
     public List<BlikTransactionDTO> getTransactions() {
         return transactions;
     }
+
+    @Override
+    public String toString() {
+        return "BlikDTO{" +
+                "code='" + code + '\'' +
+                ", accountId=" + accountId +
+                ", expirationDate=" + expirationDate +
+                ", creationDate=" + creationDate +
+                ", transactions=" + transactions +
+                '}';
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -23,9 +24,9 @@ public class BlikTransactionService implements ServiceInterface {
             return -2;
         }
 
-        if(!verifyNotNulledParams()){
-            return -3;
-        }
+//        if(!verifyNotNulledParams()){
+//            return -3;
+//        }
 
         BlikDTO blik = blikRepository.getObjectByKey(blikTransaction.getBlikCode());
         if(blik == null)
@@ -74,7 +75,8 @@ public class BlikTransactionService implements ServiceInterface {
     @Override
     public boolean verifyNotNulledParams(){
         return blikTransaction.getBlikCode() != null
-                && blikTransaction.getAmount() != null
+                &&
+                blikTransaction.getAmount() != null
                 && blikTransaction.getDate() != null;
     }
 

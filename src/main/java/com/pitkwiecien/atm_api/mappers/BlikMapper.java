@@ -18,8 +18,8 @@ public class BlikMapper implements RowMapper<BlikDTO> {
     public BlikDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         BlikDTO blikDTO = new BlikDTO();
         blikDTO.setCode(rs.getString("code"));
-        blikDTO.setCreationDate(rs.getDate("creation_date"));
-        blikDTO.setExpirationDate(rs.getDate("expiration_date"));
+        blikDTO.setCreationDate(rs.getTimestamp("creation_date"));
+        blikDTO.setExpirationDate(rs.getTimestamp("expiration_date"));
         blikDTO.setAccountId(rs.getInt("account_id"));
 
         BlikTransactionDTO blikTransactionDTO = blikTransactionMapper.mapRow(rs, rowNum);

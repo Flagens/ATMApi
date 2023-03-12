@@ -52,6 +52,12 @@ public class BlikDTO {
         return transactions;
     }
 
+    public BlikDTO() {
+        this.expirationDate = new Date();
+        this.creationDate = new Date();
+
+    }
+
     @Override
     public String toString() {
         return "BlikDTO{" +
